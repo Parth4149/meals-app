@@ -27,7 +27,7 @@ const Modal = () => {
           </a>
           <button
             onClick={() => setShowModal(false)}
-            className="btn btn-hipster close-btn"
+            className="btn btn-hipster"
             type="button"
           >
             close

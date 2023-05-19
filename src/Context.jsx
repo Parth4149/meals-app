@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-
+import { getFavoritesFromLocalStorage } from "./LocalStorage";
 import axios from "axios";
 import Meals from "./components/Meals";
 
@@ -15,19 +15,9 @@ const AppProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState(null);
 
-  const getFavoritesFromLocalStorage = () => {
-    let favorites = localStorage.getItem('favorites');
-    if (favorites) {
-      favorites = JSON.parse(favorites);
-    } else {
-      favorites = [];
-    }
-    return favorites;
-  }
-
   const [favorites, setFavorites] = useState(getFavoritesFromLocalStorage());
 
-  // console.log(meals); 
+  // console.log(meals);
   const fetchMeals = async (url) => {
     setLoading(true);
     try {
@@ -41,8 +31,6 @@ const AppProvider = ({ children }) => {
 
   const fetchRandomMeal = () => {
     setSearchTerm("");
-    // setText("");
-    console.log("random meal");
     fetchMeals(randomMealUrl);
   };
 
@@ -57,13 +45,12 @@ const AppProvider = ({ children }) => {
 
   const selectMeal = (idMeal, favoriteMeal) => {
     let meal;
-    console.log(favoriteMeal);
     // when i click on img of Meals, the value of favoriteMeal becomes undefined
     // when i click on img of Favorites, the value of favoriteMeal becomes true
     if (favoriteMeal) {
       meal = favorites.find((meal) => meal.idMeal === idMeal);
     } else {
-      meal = meals.find((meal) => meal.idMeal === idMeal); 
+      meal = meals.find((meal) => meal.idMeal === idMeal);
     }
     // console.log(idMeal);
     setSelectedMeal(meal);
@@ -71,21 +58,20 @@ const AppProvider = ({ children }) => {
   };
 
   const addToFavorites = (idMeal) => {
-    const alreadyFavorites = favorites.find((meal) => meal.idMeal === idMeal); // can use localStorage  
+    const alreadyFavorites = favorites.find((meal) => meal.idMeal === idMeal); // can use localStorage
     if (alreadyFavorites) return;
     //  if alreadyFavorites, there is no need to find meal
     let meal = meals.find((meal) => meal.idMeal === idMeal);
     const updatedFavorites = [...favorites, meal]; // OR favorites.push(meal);
     setFavorites(updatedFavorites);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-  }
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
 
   const removeFromFavorites = (idMeal) => {
     const updatedFavorites = favorites.filter((meal) => meal.idMeal !== idMeal);
     setFavorites(updatedFavorites);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-  }
-
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
 
   return (
     <AppContext.Provider
@@ -100,7 +86,7 @@ const AppProvider = ({ children }) => {
         selectedMeal,
         favorites,
         addToFavorites,
-        removeFromFavorites
+        removeFromFavorites,
       }}
     >
       {children}

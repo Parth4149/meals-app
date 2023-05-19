@@ -1,12 +1,7 @@
-import React from "react";
-import { useContext } from "react";
 import { useGlobalContext } from "../Context";
-// import icons
-import LikeIcon from "../icons/LikeIcon";
+import Meal from "./ui/Meal";
 
 const Meals = () => {
-  const root = getComputedStyle(document.querySelector(":root"));
-
   const { loading, meals, selectMeal, addToFavorites } = useGlobalContext();
 
   if (loading) {
@@ -27,26 +22,14 @@ const Meals = () => {
 
   return (
     <section className="section-center meals">
-      {meals.map((meal) => {
-        const { idMeal, strMeal: title, strMealThumb: image } = meal;
-        <h4>title</h4>;
-        return (
-          <article className="meal" key={idMeal}>
-            <img
-              onClick={() => selectMeal(idMeal)}
-              className="img"
-              src={image}
-              alt="title"
-            />
-            <footer>
-              <h4>{title}</h4>
-              <button onClick={() => addToFavorites(idMeal)} className="like-btn">
-                <LikeIcon fill={root.getPropertyValue("--black")} />
-              </button>
-            </footer>
-          </article>
-        );
-      })}
+      {meals.map((meal) => (
+        <Meal
+          meal={meal}
+          key={meal.idMeal}
+          selectMeal={selectMeal}
+          addToFavorites={addToFavorites}
+        />
+      ))}
     </section>
   );
 };
